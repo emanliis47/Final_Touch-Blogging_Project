@@ -1,5 +1,5 @@
 # Final_Touch-Blogging_Project
-[![MasterHead](https://www.canva.com/design/DAFEpdSVcLM/WdY8AfJ188M5Wrc8MvMHPA/watch?utm_content=DAFEpdSVcLM&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+[![MasterHead](https://www.canva.com/design/DAFEpdSVcLM/WdY8AfJ188M5Wrc8MvMHPA/watch?utm_content=DAFEpdSVcLM&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)]
 <h1 align="center">Hi 👋, I'm SameerSweety Swain</h1>
 <h3 align="center">A passionate backend developer from India</h3>
 <img align="right" alt="how" width="400" src="https://tenor.com/view/programmer-gif-19019116">
