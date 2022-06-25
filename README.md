@@ -1,7 +1,7 @@
 # Final_Touch-Blogging_Project
 <h1 align="center">Hi 👋, I'm SameerSweety Swain</h1>
 <h3 align="center">A passionate backend developer from India</h3>
-<img align="right" alt="how" width="400" src="https://tenor.com/view/programmer-gif-19019116">
+<img align="right" alt="how" width="400" src="https://tenor.com/view/programmer-gif-19019116.gif">
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=emanliis47&label=Profile%20views&color=0e75b6&style=flat" alt="emanliis47" /> </p>
 
 <p align="left"> <a href="https://github.com/ryo-ma/github-profile-trophy"><img src="https://github-profile-trophy.vercel.app/?username=emanliis47" alt="emanliis47" /></a> </p>
