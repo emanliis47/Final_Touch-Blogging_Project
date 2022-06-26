@@ -7,11 +7,20 @@ const authenticate = async function (req, res, next) {
   try {
       let token = req.headers["x-api-key"];
       if (!token) token = req.headers["x-api-key"];
-      if (!token) return res.status(401).send({ status: false, msg: "token must be present" });
+      if (!token) return res.status(400).send({ status: false, msg: "token must be present" });
       console.log(token);
-      let decodedToken = jwt.verify(token, "weAreThree");
-      if (!decodedToken)
-          return res.status(401).send({ status: false, msg: "token is invalid" })
+      let decodedToken = jwt.verify(token, "weAreThree", function(err, decoded) {
+        if (err) {
+            console.log(err.message)
+        } else return decoded
+    });
+    console.log(decodedToken)
+
+
+    if (!decodedToken) {
+        return res.status(400).send({ status: false, msg: "Invalid authentication token in request" });
+    }
+    req["authorId"] = decodedToken.authorId;
       next()
   }
   catch (err) {
@@ -23,7 +32,7 @@ const authorise = async function (req, res, next) {
   try {
       let blogId = req.params.blogId;
       if (!isValidObjectId(blogId)) {
-          return res.status(400).send({ status: false, msg: `no such as an _id:${blogId} found` }) // validation - 1
+          return res.status(400).send({ status: false, msg: `no such as an _id:${blogId} found` }) 
       }
       let findAuthorId = await blogModel.findById(blogId)
       let authorId = findAuthorId.authorId

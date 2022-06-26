@@ -19,6 +19,6 @@ mongoose.connect("mongodb+srv://ApisForBlog:ApisForBlog@blogapis.nc2ytii.mongodb
 app.use('/', route);
 
 
-app.listen(process.env.PORT || 23415, function () {
-    console.log('Your Web app running on port ' + (process.env.PORT || 23415))
+app.listen(process.env.PORT || 3000, function () {
+    console.log('Your Web app running on port ' + (process.env.PORT || 3000))
 });

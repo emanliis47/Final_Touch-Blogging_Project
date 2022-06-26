@@ -1,5 +1,7 @@
 const checkValid = require("../validations/checkValid")
 const {isValid, isValidRequestBody } = checkValid
+const authorModel = require("../models/authorModel");
+const jwt = require("jsonwebtoken");
 const loginAuthor = async function (req, res) {
   try {
       let requestBody = req.body;
