@@ -66,7 +66,7 @@ const createBlog = async function (req, res) {
       res.status(201).send({ status: true, message: "New blog created sucessfully", data: newBlog })
   }
   catch (error) {
-      res.status(500).send({ status: false, message: error.message });
+      res.status(500).send({ status: false, message: error.stack });
   }
 }
 
@@ -119,11 +119,11 @@ const updateblog = async function (req, res) {
          return
     }
     let user = await blogModel.findById(blogId);
-    if (isValid(user) || user.isDeleted === true) {
-         res.status(401).send({ status: false, msg: " no such data as found" })
+    if (!isValid(user) || user.isDeleted === true) {
+         res.status(400).send({ status: false, msg: " no such data as found" })
          return
     }
-    if (isValid(bodyData))  return res.status(400).send({ status: false, msg: "no data to update" }) 
+    if (!isValid(bodyData))  return res.status(400).send({ status: false, msg: "no data to update" }) 
     bodyData.isPublished = true
     bodyData.publishedAt = new Date()
     let updatedBlog = await blogModel.findOneAndUpdate({ _id: blogId }, bodyData, { new: true });
@@ -136,13 +136,14 @@ const updateblog = async function (req, res) {
 
 const deleteBlogById = async function (req, res) {
   try {
+       const filterQuery = { isDeleted: true}
         let blogId = req.params.blogId
         if (!isValidObjectId(blogId)) {
             return res.status(400).send({ status: false, msg: `${blogId} is not a valid` })
         }
         let findBlogId = await blogModel.findOneAndUpdate({ _id: blogId }, { $set: { isDeleted: true, deletedAt: Date.now() } }, { new: true })
-        if (!isValid(findBlogId)) return res.status(404).send({ Status: false, mgs: "Document Not Found" }) 
-        res.status(200).send({ Status: true, data: findBlogId })
+        if (isValid(findBlogId)) return res.status(404).send({ status: false, message: "No matching blog found" }) 
+        res.status(200).send({ status: true, message: "Blog(s) deleted sucessfully"})
     }
   catch (error) {
       res.status(500).send({ status: false, message: error.message });
