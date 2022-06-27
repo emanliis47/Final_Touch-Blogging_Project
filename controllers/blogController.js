@@ -49,36 +49,40 @@ const createBlog = async function (req, res) {
 
 const listOfBlogs = async function (req, res) {
   try {
-      const filterQuery = { isDeleted: false, deletedAt: null, isPublished: true }
-      const queryParams = req.query
-      
-      const { authorId, category, tags, subcategory } = queryParams
-      if (isValidRequestBody(queryParams)) {
+    const queryParams = req.query
+
+    const fillterBlog = {
+        isDeleted: false,
+        isPublished: true
+    }
+
+    const { authorId, category, tags, subcategory } = queryParams
+
+    if (authorId) {
         if (!isValidObjectId(authorId)) {
-            res.status(400).send({ status: false, message: `${authorId} is not a valid author id` })
-            return
+            return res.status(400).send({ status: false, message: 'invalid authorid ' })
         }
-          if (isValid(authorId) && isValidObjectId(authorId)) {
-              filterQuery["authorId"] = authorId
-          }
-          if (isValid(category)) {
-              filterQuery["category"] = category.trim()
-          }
-          if (isValid(tags)) {
-              const tagsArr = tags.trim().split(",").map(subcat => tags.trim());
-              filterQuery["tags"] = { $all: tagsArr }
-          }
-          if (isValid(subcategory)) {
-              const subcatArr = subcategory.trim().split(",").map(subcat => subcat.trim());
-              filterQuery["subcategory"] = { $all: subcatArr }
-          }
-      }
-      const blogs = await blogModel.find(filterQuery).populate("authorId");
-      if (Array.isArray(blogs) && blogs.length === 0) {
-          res.status(404).send({ status: false, message: "No blog found" })
-          return
-      }
-      res.status(200).send({ status: true, message: "Blogs list", data: blogs })
+        fillterBlog['authorId'] = authorId
+    }
+
+    if (category) {
+        fillterBlog['category'] = category
+    }
+
+    if (tags) {
+        fillterBlog['tags'] = tags
+    }
+
+    if (subcategory) {
+        fillterBlog['subCategory'] = subcategory
+    }
+
+    const blogs = await blogModel.find(fillterBlog).populate("authorId");
+
+    if (blogs.length == 0) {
+        return res.status(404).send({ status: false, message: "No blogs Available." })
+    }
+    res.status(200).send({ status: true, data: blogs });
   }
   catch (error) {
       res.status(500).send({ status: false, message: error.message });
@@ -89,6 +93,10 @@ const updateblog = async function (req, res) {
   try {
     let blogId = req.params.blogId;
     let bodyData = req.body;
+    if (!isValidRequestBody(bodyData)) {
+          res.status(400).send({ status: false, message: "Invalid request body. Please provide another details" })
+          return
+      }
     if (!isValidObjectId(blogId)) {
          res.status(400).send({ status: false, msg: `${blogId} is not a valid ` }) 
          return
@@ -101,11 +109,11 @@ const updateblog = async function (req, res) {
     if (!isValid(bodyData))  return res.status(400).send({ status: false, msg: "no data to update" }) 
     bodyData.isPublished = true
     bodyData.publishedAt = new Date()
-    let updatedBlog = await blogModel.findOneAndUpdate({ _id: blogId }, bodyData, { new: true });
-    res.status(200).send({ status: true, msg: updatedBlog })}
+    let updatedBlog = await blogModel.findOneAndUpdate({ _id: blogId }, bodyData, { new: true })
+    res.status(200).send({ status: true, messgae: "Blog updated sucessfully", data: updatedBlog })}
 
   catch (error) {
-      res.status(500).send({ status: false, message: error.message });
+      res.status(500).send({ status: false, message: error.stack });
   }
 }
 
